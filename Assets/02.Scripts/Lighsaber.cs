@@ -11,7 +11,6 @@ public class Lightsaber : MonoBehaviour
     [Header("Trail Settings")]
     [SerializeField] private int maxPoints = 20;
     [SerializeField] private float minVertexDistance = 0.01f;
-    [SerializeField] private float trailWidth = 1f;
 
     private Mesh trailMesh;
 
