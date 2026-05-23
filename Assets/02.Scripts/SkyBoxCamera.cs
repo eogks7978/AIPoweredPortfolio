@@ -2,15 +2,29 @@ using UnityEngine;
 
 public class SkyBoxCamera : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Transform mainCameraTr;
+
+    private void Start()
     {
-        
+        Initialize();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update() 
     {
-        
+        FollowMainCameraRotation();
+    }
+
+    private void Initialize()
+    {
+        if (mainCameraTr == null)
+            mainCameraTr = Camera.main.transform;
+    }
+
+    private void FollowMainCameraRotation()
+    {
+        if (mainCameraTr != null)
+        {
+            transform.rotation = mainCameraTr.rotation;
+        }
     }
 }
