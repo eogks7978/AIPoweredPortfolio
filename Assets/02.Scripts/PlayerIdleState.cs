@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class PlayerIdleState : PlayerGroundedState
 {
     public PlayerIdleState(PlayerController player, StateMachine stateMachine)
@@ -6,22 +8,31 @@ public class PlayerIdleState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-
-        // 💡 플레이어가 어떤 무기를 들고 있든, 그 무기의 Idle 애니메이션 이름을 가져옵니다.
-        string idleAnim = player.CurrentWeapon.IdleAnimationName;
-
-        // 가져온 이름으로 애니메이션을 재생합니다. (예: "Idle_Sword", "Idle_Gun")
-        player.Anim.Play(idleAnim);
+        player.CurrentMoveSpeed = 0f;
+        player.Rb.linearVelocity = new Vector3(0f, 0f, 0f);
+        player.Anim.CrossFadeInFixedTime("Idle", 0.2f);
     }
 
     public override void Update()
     {
         base.Update();
 
-        // 이동 입력이 들어오면 MoveState로 전환하는 등의 기존 로직...
-        //if (player.InputX != 0)
-        //{
-        //    stateMachine.ChangeState(player.MoveState);
-        //}
+        if (player.IsMoving)
+        {
+            if (player.playerInputHandler.RunHeld && player.CanRun)
+            {
+                stateMachine.ChangeState(player.RunState);
+                return;
+            }
+
+            stateMachine.ChangeState(player.WalkState);
+            return;
+        }
+
+        if (player.playerInputHandler.JumpPressed && player.CanJump)
+        {
+            stateMachine.ChangeState(player.JumpState);
+            return;
+        }
     }
 }

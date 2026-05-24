@@ -10,7 +10,8 @@ public class Lightsaber : MonoBehaviour
 
     [Header("Trail Settings")]
     [SerializeField] private int maxPoints = 20;
-    [SerializeField] private float minVertexDistance = 0.01f;
+    [SerializeField] private float minVertexDistance = 0.03f;
+    [SerializeField] private float pointLifeTime = 0.08f;
 
     private Mesh trailMesh;
 
@@ -33,9 +34,19 @@ public class Lightsaber : MonoBehaviour
 
     private void LateUpdate()
     {
+        RemoveOldPoints();
+
         AddPoint();
 
         BuildMesh();
+    }
+
+    private void RemoveOldPoints()
+    {
+        float currentTime = Time.time;
+
+        points.RemoveAll(point =>
+            currentTime - point.lifeTime > pointLifeTime);
     }
 
     private void AddPoint()
@@ -69,7 +80,10 @@ public class Lightsaber : MonoBehaviour
     private void BuildMesh()
     {
         if (points.Count < 2)
+        {
+            trailMesh.Clear();
             return;
+        }
 
         int vertexCount = points.Count * 2;
         int triangleCount = (points.Count - 1) * 6;

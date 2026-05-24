@@ -30,8 +30,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 0.5
-    - _GridLineThickness: 0.002
-    - _GridSize: 0.4
+    - _GridLineThickness: 0.001
+    - _GridSize: 0.1
     - _Intensity: 0
     m_Colors:
     - _GridColour: {r: 10.680627, g: 10.680627, b: 10.680627, a: 1}

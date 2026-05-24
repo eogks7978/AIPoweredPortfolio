@@ -39,15 +39,8 @@ public class PlayerGroundAttackState : PlayerGroundedState
         //    호출하면 Mouse0 입력 시 또 ChangeState(GroundAttackState)를 타기 때문입니다.
         //    단, 점프와 낙하 감지는 여기서 직접 처리합니다.
 
-        // 절벽에서 떨어지는 경우
-        if (!player.IsGrounded)
-        {
-            stateMachine.ChangeState(player.FallState);
-            return;
-        }
-
         // 공격 중 마우스 클릭 → 버퍼에만 저장, 즉시 전환 X
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (player.playerInputHandler.AttackPressed)
         {
             nextAttackBuffered = true;
         }
@@ -74,7 +67,6 @@ public class PlayerGroundAttackState : PlayerGroundedState
 
     public override void FixedUpdate()
     {
-        // 공격 중 이동을 막고 싶다면 velocity를 0으로 고정
         player.Rb.linearVelocity = new Vector3(0f, player.Rb.linearVelocity.y, 0f);
     }
 

@@ -9,6 +9,8 @@ public class PlayerFallState : PlayerAirborneState
     public override void Enter()
     {
         base.Enter();
+
+        player.Anim.CrossFadeInFixedTime("Falling Idle", 0.2f);
     }
 
     public override void Update()
@@ -17,7 +19,8 @@ public class PlayerFallState : PlayerAirborneState
 
         if (player.IsGrounded)
         {
-            stateMachine.ChangeState(player.IdleState);
+            player.Anim.CrossFadeInFixedTime("Landing", 0.2f);
+            stateMachine.ChangeState(player.LandingState);
         }
     }
 }

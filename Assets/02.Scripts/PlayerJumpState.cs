@@ -9,14 +9,14 @@ public class PlayerJumpState : PlayerAirborneState
     {
         base.Enter();
 
-        player.Anim.Play("Jump");
+        player.Anim.CrossFadeInFixedTime("Jump", 0.1f);
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (player.Rb.linearVelocity.y < 0)
+        if (player.Rb.linearVelocity.y < -0.1f)
         {
             stateMachine.ChangeState(player.FallState);
         }
