@@ -9,16 +9,16 @@ public abstract class PlayerGroundedState : PlayerState
     {
         base.Update();
 
-        if (!player.IsGrounded)
+        if (!playerController.IsGrounded)
         {
-            stateMachine.ChangeState(player.FallState);
+            stateMachine.ChangeState(playerController.FallState);
             return;
         }
 
         // ⭕ 수정: 이제 일반 AttackState가 아니라, 분리된 'GroundAttackState'로 전환합니다.
-        if (player.playerInputHandler.AttackPressed && stateMachine.CurrentState != player.GroundAttackState)
+        if (playerController.player.PlayerInput.AttackPressed && stateMachine.CurrentState != playerController.GroundAttackState)
         {
-            stateMachine.ChangeState(player.GroundAttackState);
+            stateMachine.ChangeState(playerController.GroundAttackState);
             return;
         }
     }

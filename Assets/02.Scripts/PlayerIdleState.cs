@@ -8,30 +8,30 @@ public class PlayerIdleState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        player.CurrentMoveSpeed = 0f;
-        player.Rb.linearVelocity = new Vector3(0f, 0f, 0f);
-        player.Anim.CrossFadeInFixedTime("Idle", 0.2f);
+        playerController.player.Anim.SetFloat("MoveSpeed", 0f);
+        playerController.player.Anim.SetTrigger("Idle");
+        playerController.player.Rb.linearVelocity = new Vector3(0f, 0f, 0f);
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (player.IsMoving)
+        if (playerController.IsMoving)
         {
-            if (player.playerInputHandler.RunHeld && player.CanRun)
+            if (playerController.player.PlayerInput.RunHeld && playerController.CanRun)
             {
-                stateMachine.ChangeState(player.RunState);
+                stateMachine.ChangeState(playerController.RunState);
                 return;
             }
 
-            stateMachine.ChangeState(player.WalkState);
+            stateMachine.ChangeState(playerController.WalkState);
             return;
         }
 
-        if (player.playerInputHandler.JumpPressed && player.CanJump)
+        if (playerController.player.PlayerInput.JumpPressed && playerController.CanJump)
         {
-            stateMachine.ChangeState(player.JumpState);
+            stateMachine.ChangeState(playerController.JumpState);
             return;
         }
     }

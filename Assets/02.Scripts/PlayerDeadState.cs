@@ -8,8 +8,8 @@ public class PlayerDeadState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        player.Anim.Play("Death");
-        player.Rb.linearVelocity = Vector3.zero;
-        player.Rb.isKinematic = true;
+        playerController.player.Anim.Play("Death");
+        playerController.player.Rb.linearVelocity = Vector3.zero;
+        playerController.player.Rb.isKinematic = true;
     }
 }

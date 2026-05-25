@@ -8,7 +8,8 @@ public class PlayerLandingState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        player.Anim.CrossFadeInFixedTime("Landing", 0.2f);
+        playerController.player.Rb.linearVelocity = new Vector3(0f, playerController.player.Rb.linearVelocity.y, 0f);
+        playerController.player.Anim.SetTrigger("Landing");
     }
 
     public override void Update()
@@ -16,9 +17,19 @@ public class PlayerLandingState : PlayerGroundedState
         base.Update();
     }
 
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        if (!playerController.IsGrounded)
+        {
+            playerController.StateMachine.ChangeState(playerController.FallState);
+        }
+    }
+
     // 애니메이션 이벤트로 호출
     public void NotifyLandingEnd()
     {
-        stateMachine.ChangeState(player.IdleState);
+        stateMachine.ChangeState(playerController.IdleState);
     }
 }

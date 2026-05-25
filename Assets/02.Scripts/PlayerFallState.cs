@@ -10,17 +10,16 @@ public class PlayerFallState : PlayerAirborneState
     {
         base.Enter();
 
-        player.Anim.CrossFadeInFixedTime("Falling Idle", 0.2f);
+        playerController.player.Anim.SetTrigger("Fall");
     }
 
     public override void Update()
     {
-        base.Update(); // 부모의 착지 검사가 작동하여 땅에 닿으면 자동으로 Idle로 탈출함
+        base.Update();
 
-        if (player.IsGrounded)
+        if (playerController.IsGrounded)
         {
-            player.Anim.CrossFadeInFixedTime("Landing", 0.2f);
-            stateMachine.ChangeState(player.LandingState);
+            stateMachine.ChangeState(playerController.LandingState);
         }
     }
 }

@@ -8,35 +8,30 @@ public class PlayerRunState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-
-        if (stateMachine.PreviousState == player.WalkState)
-            player.Anim.CrossFadeInFixedTime("Run", 0.2f); // Walk→Run: 블렌딩 길게
-        else
-            player.Anim.CrossFadeInFixedTime("Run", 0.05f); // Idle→Run: 빠르게
     }
 
     public override void Update()
     {
         base.Update();
 
-        player.Anim.speed = player.CurrentMoveSpeed / player.Stats.runSpeed;
-        player.Anim.SetFloat("MoveSpeed", player.CurrentMoveSpeed);
+        //playerController.player.Anim.speed = playerController.player.CurrentMoveSpeed / playerController.player.Stats.runSpeed;
+        playerController.player.Anim.SetFloat("MoveSpeed", playerController.player.CurrentMoveSpeed);
 
-        if (!player.IsMoving)
+        if (!playerController.IsMoving)
         {
-            stateMachine.ChangeState(player.IdleState);
+            stateMachine.ChangeState(playerController.IdleState);
             return;
         }
 
-        if (!player.playerInputHandler.RunHeld)
+        if (!playerController.player.PlayerInput.RunHeld)
         {
-            stateMachine.ChangeState(player.WalkState);
+            stateMachine.ChangeState(playerController.WalkState);
             return;
         }
 
-        if (player.playerInputHandler.JumpPressed && player.CanJump)
+        if (playerController.player.PlayerInput.JumpPressed && playerController.CanJump)
         {
-            stateMachine.ChangeState(player.JumpState);
+            stateMachine.ChangeState(playerController.JumpState);
             return;
         }
     }
@@ -44,44 +39,20 @@ public class PlayerRunState : PlayerGroundedState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        player.CurrentMoveSpeed = Mathf.Lerp(player.CurrentMoveSpeed, player.Stats.runSpeed, Time.fixedDeltaTime * 3f);
 
-        float moveX = player.playerInputHandler.MoveInput.x;
-        float moveZ = player.playerInputHandler.MoveInput.y;
-        Transform cam = Camera.main.transform;
-        Vector3 forward = cam.forward;
-        Vector3 right = cam.right;
-        forward.y = 0f;
-        right.y = 0f;
-        forward.Normalize();
-        right.Normalize();
-        Vector3 moveDir = (forward * moveZ + right * moveX).normalized;
+        playerController.player.CurrentMoveSpeed =
+            Mathf.Lerp(
+                playerController.player.CurrentMoveSpeed,
+                playerController.player.Stats.runSpeed,
+                Time.fixedDeltaTime * 3f);
 
-        if (moveDir != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            player.transform.rotation = Quaternion.Slerp(
-                player.transform.rotation,
-                targetRotation,
-                Time.fixedDeltaTime * 1f
-            );
-        }
+        Vector3 moveDir = playerController.player.GetMoveDirection();
 
-        player.Rb.linearVelocity = new Vector3(
-            moveDir.x * player.CurrentMoveSpeed,
-            player.Rb.linearVelocity.y,
-            moveDir.z * player.CurrentMoveSpeed);
+        Vector3 velocity = new Vector3(
+            moveDir.x * playerController.player.CurrentMoveSpeed,
+            playerController.player.Rb.linearVelocity.y,
+            moveDir.z * playerController.player.CurrentMoveSpeed);
 
-        Vector3 roatationDir = player.GetMoveDirection();
-
-        if (roatationDir != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(roatationDir);
-            player.transform.rotation = Quaternion.Slerp(
-                player.transform.rotation,
-                targetRotation,
-                Time.fixedDeltaTime * 10f
-            );
-        }
+        playerController.player.Move(velocity);
     }
 }

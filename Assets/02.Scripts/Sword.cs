@@ -4,16 +4,18 @@ public class Sword : MonoBehaviour, IWeapon
 {
     public void Attack()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Attack!");
     }
 
     public ISkill GetNormalAttack(int comboIndex)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("기본공격!");
+        return null;
     }
 
     public ISkill GetSkill(int skillSlot)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("GetSkill!");
+        return null;
     }
 }
