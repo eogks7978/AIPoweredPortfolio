@@ -42,6 +42,7 @@ public class PlayerCharacter : MonoBehaviour
     private void Start()
     {
         WeaponController.ChangeWeapon(tempWeapon);
+        Controller.StateMachine.ChangeState(Controller.IdleState);
     }
 
     public Vector3 GetMoveDirection()
@@ -63,6 +64,8 @@ public class PlayerCharacter : MonoBehaviour
 
     public void Move(Vector3 velocity)
     {
+        if (!Controller.IsGrounded) return;
+
         Vector3 horizontal = new Vector3(velocity.x, 0f, velocity.z);
 
         if (horizontal.magnitude > maxMoveSpeed)

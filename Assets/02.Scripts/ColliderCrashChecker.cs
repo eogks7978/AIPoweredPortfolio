@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class CharacterGroundChecker : MonoBehaviour
+public class ColliderCrashChecker : MonoBehaviour
 {
-    [SerializeField] private BoxCollider col;
-    [SerializeField] private LayerMask groundLayer;
-    public bool IsGround;
+    [SerializeField] private Collider col;
+    [SerializeField] private LayerMask colliderLayer;
+    public bool IsCrashed;
     private int groundCount;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -15,20 +15,20 @@ public class CharacterGroundChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((groundLayer.value & (1 << other.gameObject.layer)) != 0)
+        if ((colliderLayer.value & (1 << other.gameObject.layer)) != 0)
         {
-            IsGround = true;
+            IsCrashed = true;
             groundCount++;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if ((groundLayer.value & (1 << other.gameObject.layer)) != 0)
+        if ((colliderLayer.value & (1 << other.gameObject.layer)) != 0)
         {
             groundCount--;
             if (groundCount <= 0)
-                IsGround = false;
+                IsCrashed = false;
         }
     }
 }

@@ -23,21 +23,25 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AnimatorOverrideController gunOverride;
 
     [Header("Ground Check")]
-    [SerializeField] private CharacterGroundChecker groundChecker;
+    [SerializeField] private ColliderCrashChecker groundChecker;
+    [SerializeField] private ColliderCrashChecker headBlockChecker;
 
     public PlayerCharacter player { get; private set; }
 
     public void OnJumpForce() => player.Rb.AddForce(Vector3.up * player.Stats.jumpForce, ForceMode.Impulse);
     public void OnLandingAnimEnd() => LandingState.NotifyLandingEnd();
+    public void OnJumpAnimEnd() => JumpState.OnJumpAnimEnd();
 
     public bool IsMoving => player.PlayerInput.MoveInput != Vector2.zero;
     public bool CanJump => IsGrounded
         && StateMachine.CurrentState is PlayerGroundedState
-        && StateMachine.CurrentState != GroundAttackState;
+        && StateMachine.CurrentState != GroundAttackState
+        && !IsHeadBlocked;
     public bool CanRun => StateMachine.CurrentState == IdleState
         || StateMachine.CurrentState == WalkState;
     public bool CanChangeWeapon => StateMachine.CurrentState == IdleState;
-    public bool IsGrounded => groundChecker.IsGround;
+    public bool IsGrounded => groundChecker.IsCrashed;
+    public bool IsHeadBlocked => headBlockChecker.IsCrashed;
     public bool IsDead => StateMachine.CurrentState == DeadState;
 
     private void Awake()
@@ -55,8 +59,6 @@ public class PlayerController : MonoBehaviour
         DeadState = new PlayerDeadState(this, StateMachine);
 
         player = GetComponent<PlayerCharacter>();
-
-        StateMachine.ChangeState(IdleState);
     }
 
     private void Start()

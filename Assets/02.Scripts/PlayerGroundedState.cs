@@ -9,7 +9,7 @@ public abstract class PlayerGroundedState : PlayerState
     {
         base.Update();
 
-        if (!playerController.IsGrounded)
+        if (!playerController.IsGrounded && playerController.player.Rb.linearVelocity.y < -3f)
         {
             stateMachine.ChangeState(playerController.FallState);
             return;

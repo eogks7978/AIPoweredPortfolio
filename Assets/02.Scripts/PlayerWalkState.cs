@@ -16,7 +16,6 @@ public class PlayerWalkState : PlayerGroundedState
     {
         base.Update();
 
-        //playerController.player.Anim.speed = playerController.player.CurrentMoveSpeed / playerController.player.Stats.walkSpeed;
         playerController.player.Anim.SetFloat("MoveSpeed", playerController.player.CurrentMoveSpeed);
 
         if (!playerController.IsMoving)

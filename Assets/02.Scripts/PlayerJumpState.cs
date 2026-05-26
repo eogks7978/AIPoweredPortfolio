@@ -21,4 +21,9 @@ public class PlayerJumpState : PlayerAirborneState
             stateMachine.ChangeState(playerController.FallState);
         }
     }
+
+    public void OnJumpAnimEnd()
+    {
+        playerController.player.Anim.SetTrigger("Fall");
+    }
 }
