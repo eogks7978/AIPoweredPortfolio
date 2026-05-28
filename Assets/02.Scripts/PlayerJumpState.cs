@@ -1,9 +1,10 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 // --- JUMP STATE (��� ����) ---
 public class PlayerJumpState : PlayerAirborneState
 {
-    public PlayerJumpState(PlayerController player, StateMachine stateMachine) : base(player, stateMachine) { }
+    public PlayerJumpState(PlayerStateController player, StateMachine stateMachine) : base(player, stateMachine) { }
 
     public override void Enter()
     {
@@ -16,10 +17,23 @@ public class PlayerJumpState : PlayerAirborneState
     {
         base.Update();
 
-        if (playerController.player.Rb.linearVelocity.y < -0.1f)
+        if (playerController.player.MovingController.Motor.BaseVelocity.y < 0f
+            || playerController.HeadCrashed)
         {
             stateMachine.ChangeState(playerController.FallState);
         }
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        UpdatePhysicsInput();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        playerController.player.Anim.ResetTrigger("Jump");
     }
 
     public void OnJumpAnimEnd()

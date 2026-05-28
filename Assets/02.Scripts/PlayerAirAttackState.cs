@@ -2,7 +2,7 @@
 
 public class PlayerAirAttackState : PlayerAirborneState
 {
-    public PlayerAirAttackState(PlayerController player, StateMachine stateMachine)
+    public PlayerAirAttackState(PlayerStateController player, StateMachine stateMachine)
         : base(player, stateMachine) { }
 
     public override void Enter()

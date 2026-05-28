@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class SkillController : MonoBehaviour
 {
-    private PlayerController playerController;
+    private PlayerStateController playerController;
 
     // 슬롯별 쿨다운 잔여 시간 (0이면 사용 가능)
     private float[] cooldownTimers;
@@ -13,7 +13,7 @@ public class SkillController : MonoBehaviour
 
     private void Awake()
     {
-        playerController = GetComponent<PlayerController>();
+        playerController = GetComponent<PlayerStateController>();
         cooldownTimers = new float[SkillSlotCount];
         playerInputHandler = GetComponent<PlayerInputHandler>();
     }
@@ -88,6 +88,6 @@ public class SkillController : MonoBehaviour
         playerController.player.Anim.Play(skill.Data.AnimationName);
 
         // 데미지/이펙트/이동 등 스킬 고유 로직
-        skill.Execute(playerController.player.gameObject, playerController.player.PlayerInput.CurrentTarget);
+        //skill.Execute(playerController.player.gameObject, playerController.player.PlayerInput.CurrentTarget);
     }
 }

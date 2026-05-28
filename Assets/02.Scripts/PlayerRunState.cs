@@ -3,18 +3,21 @@ using UnityEngine;
 
 public class PlayerRunState : PlayerGroundedState
 {
-    public PlayerRunState(PlayerController player, StateMachine stateMachine) : base(player, stateMachine) { }
+    public PlayerRunState(PlayerStateController player, StateMachine stateMachine) : base(player, stateMachine) { }
 
     public override void Enter()
     {
         base.Enter();
+        playerController.player.MovingController.MaxStableMoveSpeed = 8f;
     }
 
     public override void Update()
     {
         base.Update();
 
-        playerController.player.Anim.SetFloat("MoveSpeed", playerController.player.CurrentMoveSpeed);
+        UpdatePhysicsInput();
+
+        playerController.player.Anim.SetFloat("MoveSpeed", playerController.player.MovingController.MaxStableMoveSpeed);
 
         if (!playerController.IsMoving)
         {
@@ -38,20 +41,5 @@ public class PlayerRunState : PlayerGroundedState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-
-        playerController.player.CurrentMoveSpeed =
-            Mathf.Lerp(
-                playerController.player.CurrentMoveSpeed,
-                playerController.player.Stats.runSpeed,
-                Time.fixedDeltaTime * 3f);
-
-        Vector3 moveDir = playerController.player.GetMoveDirection();
-
-        Vector3 velocity = new Vector3(
-            moveDir.x * playerController.player.CurrentMoveSpeed,
-            playerController.player.Rb.linearVelocity.y,
-            moveDir.z * playerController.player.CurrentMoveSpeed);
-
-        playerController.player.Move(velocity);
     }
 }

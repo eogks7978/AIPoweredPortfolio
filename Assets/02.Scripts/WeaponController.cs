@@ -14,12 +14,9 @@ public class WeaponController : MonoBehaviour
         player = GetComponent<PlayerCharacter>();
     }
 
-    public bool CanChangeWeapon =>
-        player.Controller.StateMachine.CurrentState == player.Controller.IdleState;
-
     public void ChangeWeapon(IWeapon newWeapon)
     {
-        if (!CanChangeWeapon) return;
+        if (player.StateController.StateMachine.CurrentState == player.StateController.IdleState) return;
 
         CurrentWeapon = newWeapon;
         ApplyAnimatorOverride(newWeapon);

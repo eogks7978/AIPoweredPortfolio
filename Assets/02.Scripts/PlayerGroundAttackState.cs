@@ -9,7 +9,7 @@ public class PlayerGroundAttackState : PlayerGroundedState
 
     private const int MaxComboIndex = 2; // 0, 1, 2 → 3콤보
 
-    public PlayerGroundAttackState(PlayerController player, StateMachine stateMachine)
+    public PlayerGroundAttackState(PlayerStateController player, StateMachine stateMachine)
         : base(player, stateMachine) { }
 
     public override void Enter()
@@ -17,11 +17,6 @@ public class PlayerGroundAttackState : PlayerGroundedState
         comboIndex = 0;
         nextAttackBuffered = false;
         attackEnded = true;
-
-        playerController.player.Rb.linearVelocity 
-            = new Vector3(0f, playerController.player.Rb.linearVelocity.y, 0f);
-
-        //PlayCurrentAttack();
     }
 
     public override void Update()

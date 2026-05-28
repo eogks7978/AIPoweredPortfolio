@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class PlayerLandingState : PlayerGroundedState
 {
-    public PlayerLandingState(PlayerController player, StateMachine stateMachine)
+    public PlayerLandingState(PlayerStateController player, StateMachine stateMachine)
         : base(player, stateMachine) { }
 
     public override void Enter()
     {
         base.Enter();
-        playerController.player.Rb.linearVelocity = new Vector3(0f, playerController.player.Rb.linearVelocity.y, 0f);
+        playerController.player.MovingController.MaxStableMoveSpeed = 0f;
         playerController.player.Anim.SetTrigger("Landing");
     }
 
@@ -21,10 +21,17 @@ public class PlayerLandingState : PlayerGroundedState
     {
         base.FixedUpdate();
 
-        if (!playerController.IsGrounded)
+        if (!playerController.player.MovingController.Motor.GroundingStatus.IsStableOnGround)
         {
             playerController.StateMachine.ChangeState(playerController.FallState);
         }
+
+        UpdatePhysicsInput();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
     }
 
     // 애니메이션 이벤트로 호출
