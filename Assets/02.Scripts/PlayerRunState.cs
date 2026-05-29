@@ -5,6 +5,8 @@ public class PlayerRunState : PlayerGroundedState
 {
     public PlayerRunState(PlayerStateController player, StateMachine stateMachine) : base(player, stateMachine) { }
 
+    private const string stateName = "Run";
+
     public override void Enter()
     {
         base.Enter();
@@ -25,6 +27,12 @@ public class PlayerRunState : PlayerGroundedState
             return;
         }
 
+        if (playerController.player.PlayerInput.isCrouching)
+        {
+            stateMachine.ChangeState(playerController.CrouchWalkState);
+            return;
+        }
+
         if (!playerController.player.PlayerInput.RunHeld)
         {
             stateMachine.ChangeState(playerController.WalkState);
@@ -36,6 +44,11 @@ public class PlayerRunState : PlayerGroundedState
             stateMachine.ChangeState(playerController.JumpState);
             return;
         }
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
     }
 
     public override void FixedUpdate()

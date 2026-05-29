@@ -21,8 +21,8 @@ using System;
         public float MoveAxisRight;
         public Quaternion CameraRotation;
         public bool JumpDown;
-        public bool CrouchDown;
-        public bool CrouchUp;
+        public bool Crouching;
+
     }
 
     public struct AICharacterInputs
@@ -176,18 +176,18 @@ public class ExampleCharacterController : MonoBehaviour, ICharacterController
                     }
 
                     // Crouching input
-                    if (inputs.CrouchDown)
+                    if (inputs.Crouching)
                     {
                         _shouldBeCrouching = true;
 
                         if (!_isCrouching)
                         {
                             _isCrouching = true;
-                            Motor.SetCapsuleDimensions(0.5f, CrouchedCapsuleHeight, CrouchedCapsuleHeight * 0.5f);
+                            Motor.SetCapsuleDimensions(0.3f, CrouchedCapsuleHeight, CrouchedCapsuleHeight * 0.5f);
                             MeshRoot.localScale = new Vector3(1f, 0.5f, 1f);
                         }
                     }
-                    else if (inputs.CrouchUp)
+                    else
                     {
                         _shouldBeCrouching = false;
                     }
@@ -227,8 +227,6 @@ public class ExampleCharacterController : MonoBehaviour, ICharacterController
         {
             case CharacterState.Default:
                 {
-                    if (!Motor.GroundingStatus.IsStableOnGround) return;
-
                     if (_lookInputVector.sqrMagnitude > 0f && OrientationSharpness > 0f)
                     {
                         // Smoothly interpolate from current to target look direction
@@ -426,7 +424,7 @@ public class ExampleCharacterController : MonoBehaviour, ICharacterController
                     if (_isCrouching && !_shouldBeCrouching)
                     {
                         // Do an overlap test with the character's standing height to see if there are any obstructions
-                        Motor.SetCapsuleDimensions(0.5f, 2f, 1f);
+                        Motor.SetCapsuleDimensions(0.3f, 2f, 1f);
                         if (Motor.CharacterOverlap(
                             Motor.TransientPosition,
                             Motor.TransientRotation,
@@ -435,7 +433,7 @@ public class ExampleCharacterController : MonoBehaviour, ICharacterController
                             QueryTriggerInteraction.Ignore) > 0)
                         {
                             // If obstructions, just stick to crouching dimensions
-                            Motor.SetCapsuleDimensions(0.5f, CrouchedCapsuleHeight, CrouchedCapsuleHeight * 0.5f);
+                            Motor.SetCapsuleDimensions(0.3f, CrouchedCapsuleHeight, CrouchedCapsuleHeight * 0.5f);
                         }
                         else
                         {

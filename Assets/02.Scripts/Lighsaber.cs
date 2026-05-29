@@ -86,7 +86,7 @@ public class Lightsaber : MonoBehaviour
         }
 
         int vertexCount = points.Count * 2;
-        int triangleCount = (points.Count - 1) * 6;
+        int triangleCount = (points.Count - 1) * 12;
 
         Vector3[] vertices = new Vector3[vertexCount];
         Vector2[] uvs = new Vector2[vertexCount];
@@ -124,6 +124,14 @@ public class Lightsaber : MonoBehaviour
             triangles[triangleIndex++] = vertIndex + 2;
             triangles[triangleIndex++] = vertIndex + 1;
             triangles[triangleIndex++] = vertIndex + 3;
+
+            triangles[triangleIndex++] = vertIndex + 2;
+            triangles[triangleIndex++] = vertIndex + 1;
+            triangles[triangleIndex++] = vertIndex;
+
+            triangles[triangleIndex++] = vertIndex + 3;
+            triangles[triangleIndex++] = vertIndex + 1;
+            triangles[triangleIndex++] = vertIndex + 2;
         }
 
         trailMesh.Clear();

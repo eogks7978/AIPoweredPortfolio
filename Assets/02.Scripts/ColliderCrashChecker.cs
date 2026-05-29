@@ -10,7 +10,7 @@ public class ColliderCrashChecker : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        col = GetComponent<BoxCollider>();
+        col = GetComponent<Collider>();
     }
 
     private void OnTriggerEnter(Collider other)

@@ -6,19 +6,20 @@ public class PlayerJumpState : PlayerAirborneState
 {
     public PlayerJumpState(PlayerStateController player, StateMachine stateMachine) : base(player, stateMachine) { }
 
+    private const string stateName = "Jump";
+
     public override void Enter()
     {
         base.Enter();
 
-        playerController.player.Anim.SetTrigger("Jump");
+        playerController.player.Anim.CrossFadeInFixedTime(stateName, 0.1f);
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (playerController.player.MovingController.Motor.BaseVelocity.y < 0f
-            || playerController.HeadCrashed)
+        if (playerController.HeadCrashed)
         {
             stateMachine.ChangeState(playerController.FallState);
         }
@@ -33,11 +34,10 @@ public class PlayerJumpState : PlayerAirborneState
     public override void Exit()
     {
         base.Exit();
-        playerController.player.Anim.ResetTrigger("Jump");
     }
 
-    public void OnJumpAnimEnd()
+    public void NotifyJumpingEnd()
     {
-        playerController.player.Anim.SetTrigger("Fall");
+        stateMachine.ChangeState(playerController.FallState);
     }
 }

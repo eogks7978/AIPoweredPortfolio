@@ -9,8 +9,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool JumpPressed { get; private set; }
     public bool AttackPressed { get; private set; }
     public bool RunHeld { get; private set; }
-    public bool CrouchDown { get; private set; }
-    public bool CrouchUp { get; private set; }
+    public bool isCrouching { get; private set; }
 
     [SerializeField] private Camera cam;
 
@@ -26,8 +25,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
         JumpPressed = Input.GetKeyDown(KeyCode.Space);
         RunHeld = Input.GetKey(KeyCode.LeftShift);
-        CrouchDown = Input.GetKeyDown(KeyCode.C);
-        CrouchUp = Input.GetKeyUp(KeyCode.C);
+        if (Input.GetKeyDown(KeyCode.C))
+            isCrouching = !isCrouching;
     }
 
     public PlayerInputs HandleCharacterInput()
@@ -40,8 +39,7 @@ public class PlayerInputHandler : MonoBehaviour
         characterInputs.MoveAxisRight = MoveInput.y;
         characterInputs.CameraRotation = cam.transform.rotation;
         characterInputs.JumpDown = JumpPressed;
-        characterInputs.CrouchDown = CrouchDown;
-        characterInputs.CrouchUp = CrouchUp;
+        characterInputs.Crouching = isCrouching;
 
         return characterInputs;
     }

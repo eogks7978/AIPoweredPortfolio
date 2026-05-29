@@ -15,6 +15,12 @@ public abstract class PlayerGroundedState : PlayerState
             stateMachine.ChangeState(playerController.GroundAttackState);
             return;
         }
+
+        if (playerController.player.MovingController.Motor.BaseVelocity.y < -8f)
+        {
+            stateMachine.ChangeState(playerController.FallState);
+            return;
+        }
     }
 
     public override void FixedUpdate()

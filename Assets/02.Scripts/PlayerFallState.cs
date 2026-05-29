@@ -7,9 +7,12 @@ public class PlayerFallState : PlayerAirborneState
 {
     public PlayerFallState(PlayerStateController player, StateMachine stateMachine) : base(player, stateMachine) { }
 
+    private const string stateName = "Falling Idle";
+
     public override void Enter()
     {
         base.Enter();
+        playerController.player.Anim.CrossFadeInFixedTime(stateName, 0.3f);
     }
 
     public override void Update()
@@ -25,7 +28,6 @@ public class PlayerFallState : PlayerAirborneState
     public override void Exit()
     {
         base.Exit();
-        playerController.player.Anim.ResetTrigger("Fall");
     }
 
     public override void FixedUpdate()

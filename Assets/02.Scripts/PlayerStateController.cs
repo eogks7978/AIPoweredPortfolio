@@ -10,6 +10,8 @@ public class PlayerStateController : MonoBehaviour
     public PlayerIdleState IdleState { get; private set; }
     public PlayerWalkState WalkState { get; private set; }
     public PlayerRunState RunState { get; private set; }
+    public PlayerCrouchState CrouchState { get; private set; }
+    public PlayerCrouchWalkState CrouchWalkState { get; private set; }
     public PlayerGroundedState GroundState { get; private set; }
     public PlayerGroundAttackState GroundAttackState { get; private set; }
     public PlayerLandingState LandingState { get; private set; }
@@ -27,9 +29,6 @@ public class PlayerStateController : MonoBehaviour
 
     public PlayerCharacter player { get; private set; }
 
-    public void OnLandingAnimEnd() => LandingState.NotifyLandingEnd();
-    public void OnJumpAnimEnd() => JumpState.OnJumpAnimEnd();
-
     public bool IsMoving => player.PlayerInput.MoveInput != Vector2.zero;
     public bool CanJump => player.MovingController.Motor.GroundingStatus.IsStableOnGround
         && StateMachine.CurrentState != GroundAttackState;
@@ -39,6 +38,9 @@ public class PlayerStateController : MonoBehaviour
     public bool IsDead => StateMachine.CurrentState == DeadState;
     public bool HeadCrashed => headCrashCheck.IsCrashed;
 
+    public void OnLandingAnimEnd() => LandingState.NotifyLandingEnd();
+    public void OnJumpingAnimEnd() => JumpState.NotifyJumpingEnd();
+
     private void Awake()
     {
         StateMachine = new StateMachine();
@@ -46,6 +48,8 @@ public class PlayerStateController : MonoBehaviour
         IdleState = new PlayerIdleState(this, StateMachine);
         WalkState = new PlayerWalkState(this, StateMachine);
         RunState = new PlayerRunState(this, StateMachine);
+        CrouchState = new PlayerCrouchState(this, StateMachine);
+        CrouchWalkState = new PlayerCrouchWalkState(this, StateMachine);
         GroundAttackState = new PlayerGroundAttackState(this, StateMachine);
         LandingState = new  PlayerLandingState(this, StateMachine);
         AirAttackState = new PlayerAirAttackState(this, StateMachine);

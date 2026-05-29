@@ -5,11 +5,13 @@ public class PlayerLandingState : PlayerGroundedState
     public PlayerLandingState(PlayerStateController player, StateMachine stateMachine)
         : base(player, stateMachine) { }
 
+    private const string stateName = "Landing";
+
     public override void Enter()
     {
         base.Enter();
         playerController.player.MovingController.MaxStableMoveSpeed = 0f;
-        playerController.player.Anim.SetTrigger("Landing");
+        playerController.player.Anim.CrossFadeInFixedTime(stateName, 0.1f);
     }
 
     public override void Update()
@@ -21,9 +23,10 @@ public class PlayerLandingState : PlayerGroundedState
     {
         base.FixedUpdate();
 
-        if (!playerController.player.MovingController.Motor.GroundingStatus.IsStableOnGround)
+        if (playerController.player.MovingController.Motor.BaseVelocity.y < -8f)
         {
-            playerController.StateMachine.ChangeState(playerController.FallState);
+            stateMachine.ChangeState(playerController.FallState);
+            return;
         }
 
         UpdatePhysicsInput();
@@ -33,6 +36,15 @@ public class PlayerLandingState : PlayerGroundedState
     {
         base.Exit();
     }
+    public override void UpdatePhysicsInput()
+    {
+        PlayerInputs input = playerController.player.PlayerInput.HandleCharacterInput();
+
+        input.JumpDown = false;
+
+        playerController.player.MovingController.SetInputs(ref input);
+    }
+
 
     // 애니메이션 이벤트로 호출
     public void NotifyLandingEnd()

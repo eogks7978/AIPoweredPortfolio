@@ -1,3 +1,5 @@
+using GLTFast.Schema;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class PlayerIdleState : PlayerGroundedState
@@ -5,12 +7,13 @@ public class PlayerIdleState : PlayerGroundedState
     public PlayerIdleState(PlayerStateController player, StateMachine stateMachine)
         : base(player, stateMachine) { }
 
+    private const string stateName = "Idle";
+
     public override void Enter()
     {
         base.Enter();
         playerController.player.Anim.SetFloat("MoveSpeed", 0f);
-        playerController.player.MovingController.MaxStableMoveSpeed = 0f;
-        playerController.player.Anim.SetTrigger("Idle");
+        playerController.player.Anim.CrossFadeInFixedTime(stateName, 0.15f);
     }
 
     public override void Update()
@@ -34,6 +37,12 @@ public class PlayerIdleState : PlayerGroundedState
         if (playerController.player.PlayerInput.JumpPressed && playerController.CanJump)
         {
             stateMachine.ChangeState(playerController.JumpState);
+            return;
+        }
+
+        if (playerController.player.PlayerInput.isCrouching)
+        {
+            stateMachine.ChangeState(playerController.CrouchState);
             return;
         }
     }

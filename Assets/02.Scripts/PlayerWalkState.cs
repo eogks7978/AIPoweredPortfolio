@@ -6,6 +6,8 @@ public class PlayerWalkState : PlayerGroundedState
 {
     public PlayerWalkState(PlayerStateController player, StateMachine stateMachine) : base(player, stateMachine) { }
 
+    private const string stateName = "Walk";
+
     public override void Enter()
     {
         base.Enter();
@@ -23,6 +25,12 @@ public class PlayerWalkState : PlayerGroundedState
         if (!playerController.IsMoving)
         {
             stateMachine.ChangeState(playerController.IdleState);
+            return;
+        }
+
+        if (playerController.player.PlayerInput.isCrouching)
+        {
+            stateMachine.ChangeState(playerController.CrouchWalkState);
             return;
         }
 
